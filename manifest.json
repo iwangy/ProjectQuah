@@ -1,0 +1,41 @@
+{
+    "name": "Project Quah",
+    "version": "0.1.0",
+    "description": "For efficient deltek entry",
+    "permissions": ["storage", "tabs", "activeTab"],
+    "host_permissions": ["https://*.mossadams.com/*"],
+    "options_ui" : {
+      "page": "options.html",
+      "open_in_tab": false
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://*.mossadams.com/*"],
+        "js": ["contentScript.js"]
+      }
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "assets/bookmark.png",
+          "assets/play.png",
+          "assets/delete.png",
+          "assets/save.png"
+        ],
+        "matches": ["https://*.mossadams.com/*"]
+      }
+    ],
+    "action": {
+      "default_icon": {
+        "16": "assets/ext-icon.png",
+        "24": "assets/ext-icon.png",
+        "32": "assets/ext-icon.png"
+      },
+      "default_title": "Front Street",
+      "default_popup": "popup.html"
+    },
+    "manifest_version": 3
+}

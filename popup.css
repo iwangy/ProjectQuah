@@ -1,0 +1,173 @@
+body {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin: 0;
+  padding: 0;
+  background-color: #cec7ba;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 350px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #adccc6;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #0e3833;
+}
+
+.content {
+  border-top: 1px solid #0e3833;
+  padding-top: 20px;
+}
+
+.input-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.input-section label {
+  flex: 1;
+  margin-right: 10px;
+  font-weight: bold;
+  color: #0e3833;
+}
+
+.input-section input,
+.input-section select {
+  flex: 2; /* Updated width to occupy more space */
+  padding: 8px;
+  border: 1px solid #0e3833;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  max-width: calc(100% - 200px); /* Added max-width to prevent overflow */
+}
+
+.input-section input::placeholder {
+  color: #bbb;
+}
+
+.input-section input:focus,
+.input-section select:focus {
+  border-color: #28a745; /* Updated color for focus state - dark green */
+}
+
+#hours {
+  margin-left: 10px;
+  max-width: 60px;
+}
+
+#hours,
+#description {
+  flex: 1;
+  margin-right: 5px; /* Adjust the spacing between elements */
+  padding: 8px;
+  border: 1px solid #0e3833;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+#description {
+  /* Adjust the width of the additional input field to fit in-line with the select dropdown */
+  max-width: 120px;
+}
+
+.input-section button {
+  flex: 1; /* Updated width to occupy more space */
+  margin-left: 10px;
+  padding: 8px;
+  background-color: #0e3833; /* Updated color for buttons - dark green */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  max-width: calc(100% - 100px); /* Added max-width to prevent overflow */
+}
+
+.input-section button:hover {
+  background-color: #1a584f; /* Darker shade for hover effect */
+}
+
+button,
+select {
+  font-family: Arial, sans-serif;
+}
+
+
+/* ------ */
+
+
+/* .container {
+  width: 280px;
+  color: #314d3e;
+}
+
+.panes {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 0;
+  position: relative;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px;
+}
+
+.textbox {
+  width: 100%;
+  font-size: 12px;
+  margin: 0;
+  padding: 0px 2px;
+}
+
+.textbox:focus {
+  outline: 0;
+  border-color: #66afe9;
+}
+
+.bookmarks {
+  margin: 5px 5px;
+  padding: 3px;
+}
+
+.bookmark {
+  display: flex;
+  border-bottom-color: #00254d;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-radius: 0.8rem;
+  padding: 3px;
+  padding-bottom: 7px;
+  margin-bottom: 7px;
+}
+
+.bookmark-title {
+  padding-left: 2px;
+}
+
+.bookmark-controls img {
+  margin: 0 4px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.bookmark-controls {
+  flex: auto;
+  text-align: right;
+} */
