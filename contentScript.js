@@ -22,6 +22,10 @@
         });
     }
 
+    function sendVerifyDataToPopup(verifyData) {
+        chrome.runtime.sendMessage({ action: "sendVerifyData", data: Array.from(verifyData.entries()) });
+    }
+
 
     // VALIDATION CODE
     // Checks for multiple US ticket numbers in line
@@ -123,6 +127,8 @@
     }
     // VALIDATION CODE
 
+    let verifyData = new Map();
+
     chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         console.log(request.action);
 
@@ -209,14 +215,21 @@
                 // for(let i = 1; i < document.querySelector('tbody').childElementCount; i++) {
                 //     console.log(document.querySelector('tr[data-kendo-grid-item-index="${i}"]').querySelector('td[data-kendo-grid-column-index="8"]').textContent)
                 // }
-                console.log("BAM");
+                verifyData.clear();
+
+
                 for (let i = 0; i < document.querySelector('tbody').childElementCount - 1; i++) {
                     const dataIndex = i; // Store the current value of i in a variable
                     const trSelector = `tr[data-kendo-grid-item-index="${dataIndex}"]`;
                     const tdSelector = `${trSelector} td[data-kendo-grid-column-index="8"]`;
+                    verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector).textContent))
                     console.log(document.querySelector(tdSelector).textContent);
                     console.log(isInputValid(document.querySelector(tdSelector).textContent));
-                  }
+                }
+
+                console.log(verifyData);
+                sendVerifyDataToPopup(verifyData);
+
                   
 
             default:

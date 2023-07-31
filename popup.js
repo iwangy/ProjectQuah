@@ -39,6 +39,24 @@ const test4 = async e => {
     chrome.tabs.sendMessage(activeTab.id, { action: "verify" });
 }
 
+function updatePopupContent(verifyData) {
+    const verifyDataElement = document.getElementById("verifyData");
+    verifyDataElement.innerHTML = "";
+
+    verifyData.forEach((value, key) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `Data index ${key}: ${value}`;
+        verifyDataElement.appendChild(listItem);
+    });
+}
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "sendVerifyData") {
+        const storedVerifyData = new Map(request.data);
+        updatePopupContent(storedVerifyData);
+    }
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
     const activeTab = await getActiveTabURL();
     console.log(activeTab.url);
@@ -51,12 +69,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         myButton.addEventListener("click", test);
 
         // Eng Input EL
-        const fillButton = document.getElementById('fillButton');
-        fillButton.addEventListener('click', test2)
+        // const fillButton = document.getElementById('fillButton');
+        // fillButton.addEventListener('click', test2)
 
         // EMS EL
-        const getValue = document.getElementById('emsButton');
-        getValue.addEventListener('click', test3);
+        // const getValue = document.getElementById('emsButton');
+        // getValue.addEventListener('click', test3);
 
         // Verify EL
         const verifyButton = document.getElementById("verify");
@@ -64,6 +82,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         // verifyButton.addEventListener("click", test4);
         // document.querySelector('tr[data-kendo-grid-item-index="1"]')
         // document.querySelector('tbody').childElementCount; - 1
+
+        chrome.runtime.sendMessage({ action: "getVerifyData" }, response => {
+            const storedVerifyData = response.data;
+            console.log(storedVerifyData);
+            updatePopupContent(storedVerifyData);
+        });
     } else {
         const container = document.getElementsByClassName("container")[0];
         container.innerHTML = '<div class="title"> This is not an iAccess page.</div>';

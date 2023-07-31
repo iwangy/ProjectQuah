@@ -1,30 +1,29 @@
-chrome.tabs.onUpdated.addListener((tabId, tab) => {
+// Background script to store the verifyData
+let storedVerifyData = new Map();
 
+// Listen for tab updates
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
-    // Inject your content script into the updated tab
-    chrome.tabs.executeScript(tabId, { file: "contentScript.js" }, function() {
+    // Inject content script into the updated tab
+    chrome.scripting.executeScript(tabId, { file: "contentScript.js" }, () => {
       // Content script has been injected
       console.log("Content script injected");
     });
   }
-    // if (tab.url && tab.url.includes("EmployeeNumber=")) {
-    //   const employeeNumberRegex = /EmployeeNumber=(\d+)/;
-    //   const match = tab.url.match(employeeNumberRegex);
+});
 
-    //   if (match) {
-    //     const employeeNumber = match[1];
-    //     console.log(employeeNumber)
-    //   }
-    //   console.log("ok.")
-      
-    //   // Check if the employee number is valid (not null)
-    //   if (employeeNumber) {
-    //     // Now you can send the employee number to the content script
-    //     chrome.tabs.sendMessage(tabId, {
-    //       type: "NEW",
-    //       employeeNumber: employeeNumber,
-    //     });
-    //   }
-    // }
-  });
-  
+// Listen for messages from content script or popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "sendVerifyData") {
+    // Update storedVerifyData with the received data
+    storedVerifyData = new Map(request.data);
+  } else if (request.action === "getVerifyData") {
+    // Respond to popup with the stored verifyData
+    sendResponse({ data: Array.from(storedVerifyData.entries()) });
+  }
+});
+
+// Function to get the stored verifyData
+function getStoredVerifyData() {
+  return storedVerifyData;
+}
