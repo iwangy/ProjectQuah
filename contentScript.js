@@ -22,10 +22,106 @@
         });
     }
 
-    function getTextBeforeColon(inputString) {
-        const parts = inputString.split(':');
-        return parts[0];
+
+    // VALIDATION CODE
+    // Checks for multiple US ticket numbers in line
+    // returns true if only 1 ticket number
+    // returns false otherwise
+    function hasMultipleUSTicketNumbers(input) {
+        // const USPattern = /(US-\d{4,5})/g;
+        const USPattern = /\bUS[-:\s]?(\d{4,5})\b/g;
+        const matches = input.match(USPattern);
+        return matches ? matches.length <= 1 : false;
+        // return matches ? matches.length > 1 : false;
+        // return matches ? true : matches.length <= 1;
+
     }
+
+    // Checks for valid ticket format
+    // returns true if ticket format is valid
+    // returns false otherwise
+    function isValidTicketNumberFormat(ticket) {
+        const VPattern = /(?:^|\s)(V[-:\s]?\d{9})(?=\s|$)/g;
+        // const VPattern = /^V\d{9}(?:\s|$)/;
+        const PPattern = /(?:^|\s)(P[-:\s]?\d{8})(?=\s|$)/g
+        // const PPattern = /^P\d{8}(?:\s|$)/;
+        const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
+        // const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?=\s|$)/g;
+        // const USPattern = /^US-\d{4,5}(?:\s|$)/;
+
+        return VPattern.test(ticket) || PPattern.test(ticket) || USPattern.test(ticket);
+    }
+
+    // Used to split checks among V,P and US tickets
+    function checkVandP(input) {
+        const VPattern = /^V\d{9}(?:\s|$)/;
+        const PPattern = /^P\d{8}(?:\s|$)/;
+
+        if (VPattern.test(input) || PPattern.test(input)) {
+            return true; // The ticket number format is V P
+        }
+
+        return false; // The ticket number format is not V P
+    }
+
+    // Used to split checks among V,P and US tickets
+    function checkUSTicket(input) {
+        const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
+        // const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?=\s|$)/g;
+        // const USPattern = /^US-\d{4,5}(?:\s|$)/;
+        // const multipleUSPattern = /(US-\d{4,5}).*?\1/;
+
+        if (USPattern.test(input)) {
+            return hasMultipleUSTicketNumbers(input);
+        }
+
+        return "INVALID TICKET FORMAT: Double check ticket number"; // The US ticket number format is invalid or multiple US tickets on the same line
+    }
+
+    function hasDescription(input) {
+        const descriptionPattern = /(?:(?<=^|\s)(V[-:\s]?\d{9}|P[-:\s]?\d{8}|US[-:\s]?\d{4,5})(?::\s*|\s+)(.+)|(.+?)\s+(V[-:\s]?\d{9}|P[-:\s]?\d{8}|US[-:\s]?\d{4,5}))/;
+        // const descriptionPattern = /(?:(?<=^|\s)(V[-:\s]?\d{9}|P[-:\s]?\d{8}|US[-:\s]?\d{4,5})[:\s]?(.+)|(.+?)[:\s]?(V[-:\s]?\d{9}|P[-:\s]?\d{8}|US[-:\s]?\d{4,5}))/;
+        // const descriptionPattern = /(?:(?<=^|\s)(V[-:\s]?\d{9}|P[-:\s]?\d{8}|US[-:\s]?\d{4,5})\s(.+)|(.+?)\s(V[-:\s]?\d{9}|P[-:\s]?\d{8}|US[-:\s]?\d{4,5}))/;
+        // const descriptionPattern = /^(V\d{9}|P\d{8}|US-\d{4,5})\s.+/;
+
+        return descriptionPattern.test(input);
+    }
+
+    function isInputValid(input) {
+        // Check if the string begins with a V, P, or US
+        if (!isValidTicketNumberFormat(input)) {
+            return "INVALID TICKET FORMAT: Double check ticket number1";
+            return false; // Invalid ticket number format
+        }
+
+        // Check for V and P tickets
+        if (checkVandP(input)) {
+            // Check for descriptions
+            if (hasDescription(input)) {
+                return "PASSES: EVERYTHING OK";
+                return true; // Valid V or P ticket with description
+            } else {
+                return "INVALID TICKET FORMAT: Please add a description"
+                return false; // V or P ticket without a description
+            }
+        }
+
+        // Check for US tickets
+        if (checkUSTicket(input)) {
+            // Check for descriptions
+            if (hasDescription(input)) {
+                return ("PASSES: EVERYTHING OK");
+                return true; // Valid US ticket with description
+            } else {
+                return "INVALID TICKET FORMAT: Please add a description"
+                return false; // US ticket without a description
+            }
+        } else {
+            return "INVALID TICKET FORMAT: Please only have 1 US ticket per entry"
+        }
+
+    }
+    // VALIDATION CODE
 
     chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         console.log(request.action);
@@ -105,6 +201,23 @@
                 }
 
                 break;
+            
+            case "verify":
+            // verifyButton.addEventListener("click", test4);
+            // document.querySelector('tr[data-kendo-grid-item-index="1"]')
+            // document.querySelector('tbody').childElementCount; - 1
+                // for(let i = 1; i < document.querySelector('tbody').childElementCount; i++) {
+                //     console.log(document.querySelector('tr[data-kendo-grid-item-index="${i}"]').querySelector('td[data-kendo-grid-column-index="8"]').textContent)
+                // }
+                console.log("BAM");
+                for (let i = 0; i < document.querySelector('tbody').childElementCount - 1; i++) {
+                    const dataIndex = i; // Store the current value of i in a variable
+                    const trSelector = `tr[data-kendo-grid-item-index="${dataIndex}"]`;
+                    const tdSelector = `${trSelector} td[data-kendo-grid-column-index="8"]`;
+                    console.log(document.querySelector(tdSelector).textContent);
+                    console.log(isInputValid(document.querySelector(tdSelector).textContent));
+                  }
+                  
 
             default:
                 break;

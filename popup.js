@@ -31,7 +31,14 @@ const test3 = async e => {
     chrome.tabs.sendMessage(activeTab.id, {action: "emsop", text: selectTag.trim(), time: hours, desc: desc})
 }
 
-const test4 = 
+const test4 = async e => {
+    console.log("bam");
+    const activeTab = await getActiveTabURL();
+    console.log(activeTab.id)
+
+    chrome.tabs.sendMessage(activeTab.id, { action: "verify" });
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     const activeTab = await getActiveTabURL();
     console.log(activeTab.url);
@@ -52,7 +59,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         getValue.addEventListener('click', test3);
 
         // Verify EL
-        const verifyButton = document.getElementById("Verify");
+        const verifyButton = document.getElementById("verify");
+        verifyButton.addEventListener('click', test4);
         // verifyButton.addEventListener("click", test4);
         // document.querySelector('tr[data-kendo-grid-item-index="1"]')
         // document.querySelector('tbody').childElementCount; - 1
