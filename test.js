@@ -1,64 +1,103 @@
-// function isInputValid(input) {
-//   // Regular expressions for ticket number patterns
-//   const VPattern = /^V\d{9}$/; // V followed by 9 numbers
-//   const PPattern = /^P\d{8}$/; // P followed by 8 numbers
-//   const USPattern = /^US-\d{4,5}$/; // US- followed by 4 or 5 numbers
+const { expect } = require('chai');
+const {
+  isInputValid,
+  isValidTicketNumberFormat,
+  checkVandP,
+  checkUSTicket,
+  hasDescription,
+} = require('./ticketValidation.js');
 
-//   // Regular expression for checking multiple US ticket numbers
-//   const multipleUSPattern = /(US-\d{4,5}).*?\1/;
+// Test cases for isValidTicketNumberFormat function
+describe('isValidTicketNumberFormat', () => {
+  it('should return true for valid ticket formats', () => {
+    expect(isValidTicketNumberFormat('V123456789')).to.be.true;
+    expect(isValidTicketNumberFormat('P12345678')).to.be.true;
+    expect(isValidTicketNumberFormat('US-1234')).to.be.true;
+    expect(isValidTicketNumberFormat('US-12345')).to.be.true;
+  });
 
-//   // Check if input begins with a valid ticket number
-//   if (VPattern.test(input) || PPattern.test(input) || USPattern.test(input)) {
-//     // Check if there are multiple US ticket number sequences
-//     if (multipleUSPattern.test(input)) {
-//       return false;
-//     }
-//     return true;
-//   }
+  it('should return false for invalid ticket formats', () => {
+    expect(isValidTicketNumberFormat('V12345678')).to.be.false;
+    expect(isValidTicketNumberFormat('P1234567A')).to.be.false;
+    expect(isValidTicketNumberFormat('V1234567890')).to.be.false;
+    expect(isValidTicketNumberFormat('V123456789This')).to.be.false;
+  });
+});
 
-//   return false;
-// }
+// Test cases for checkVandP function
+describe('checkVandP', () => {
+  it('should return true for valid V and P ticket formats', () => {
+    expect(checkVandP('V123456789 This is a valid description')).to.be.true;
+    expect(checkVandP('P12345678 Another valid description')).to.be.true;
+  });
 
-// // Test cases
-// console.log(isInputValid("V123456789")); // true
-// console.log(isInputValid("P12345678")); // true
-// console.log(isInputValid("US-1234")); // true
-// console.log(isInputValid("V12345678")); // false (should have 9 numbers)
-// console.log(isInputValid("US-12345")); // true (should have 4 or 5 numbers)
-// console.log(isInputValid("US-1234 US-5678")); // false (multiple US ticket numbers)
-// console.log(isInputValid("V123456789")); // true
+  it('should return false for invalid V and P ticket formats', () => {
+    expect(checkVandP('V12345678')).to.be.false;
+    expect(checkVandP('P1234567A')).to.be.false;
+  });
+});
 
-function hasMultipleUSTicketNumbers(input) {
-  const USPattern = /(US-\d{4,5})/g;
-  const matches = input.match(USPattern);
-  return matches ? matches.length > 1 : false;
-}
+// Test cases for checkUSTicket function
+describe('checkUSTicket', () => {
+  it('should return true for valid US ticket formats', () => {
+    expect(checkUSTicket('US-1234 Description for US ticket')).to.be.true;
+    expect(checkUSTicket('US-12345 Another description')).to.be.true;
+  });
 
-function isInputValid(input) {
-  // Regular expressions for ticket number patterns
-  const VPattern = /^V\d{9}$/; // V followed by 9 numbers
-  const PPattern = /^P\d{8}$/; // P followed by 8 numbers
-  const USPattern = /^US-\d{4,5}$/; // US- followed by 4 or 5 numbers
+  it('should return error message for invalid US ticket formats', () => {
+    expect(checkUSTicket('US-123456')).to.equal('INVALID TICKET FORMAT: Double-check ticket number');
+    expect(checkUSTicket('US-123')).to.equal('INVALID TICKET FORMAT: Double-check ticket number');
+  });
+});
 
-  // Check if input begins with a valid ticket number
-  if (VPattern.test(input) || PPattern.test(input) || USPattern.test(input)) {
-    // Check if there are multiple US ticket number sequences
-    if (hasMultipleUSTicketNumbers(input)) {
-      return "TEST";
-    }
-    return true;
-  }
+// Test cases for hasDescription function
+describe('hasDescription', () => {
+  it('should return true if the input has a valid description for a ticket', () => {
+    expect(hasDescription('V123456789 This is a valid description')).to.be.true;
+    expect(hasDescription('P12345678 Another valid description')).to.be.true;
+    expect(hasDescription('US-1234 Description for US ticket')).to.be.true;
+  });
 
-  return false;
-}
+  it('should return false if the input does not have a valid description', () => {
+    expect(hasDescription('V123456789')).to.be.false;
+    expect(hasDescription('P12345678')).to.be.false;
+    expect(hasDescription('US-1234')).to.be.false;
+  });
+});
 
-// Test cases
-console.log(isInputValid("V123456789")); // true
-console.log(isInputValid("P12345678")); // true
-console.log(isInputValid("US-1234")); // true
-console.log(isInputValid("V12345678")); // false (should have 9 numbers)
-console.log(isInputValid("US-12345")); // true (should have 4 or 5 numbers)
-console.log(isInputValid("US-123456")); // true (should have 4 or 5 numbers)
-console.log(isInputValid("US-1234 US-5678")); // false (multiple US ticket numbers)
-console.log(isInputValid("V123456789")); // true
+// Test cases for isInputValid function
+describe('isInputValid', () => {
+  it('should return "PASSES: EVERYTHING OK" for valid input', () => {
+    expect(isInputValid('V123456789 This is a valid description')).to.equal(
+      'PASSES: EVERYTHING OK'
+    );
+    expect(isInputValid('P12345678 Another valid description')).to.equal(
+      'PASSES: EVERYTHING OK'
+    );
+    expect(
+      isInputValid('US-1234 Description for US ticket')
+    ).to.equal('PASSES: EVERYTHING OK');
+  });
 
+  it('should return an error message for invalid input', () => {
+    expect(isInputValid('V12345678')).to.equal(
+      'INVALID TICKET FORMAT: Double-check ticket number'
+    );
+    expect(isInputValid('US-1234')).to.equal(
+      'INVALID TICKET FORMAT: Please add a description'
+    );
+    expect(isInputValid('US-12345')).to.equal(
+      'INVALID TICKET FORMAT: Please add a description'
+    );
+    expect(isInputValid('US-1234 US-5678 US-12345')).to.equal(
+      'INVALID TICKET FORMAT: Please only have 1 US ticket per entry'
+    );
+
+    expect(isInputValid('V123456789 US-1234 This is a mixed ticket description')).to.equal(
+      'INVALID TICKET FORMAT: Double-check ticket number'
+    );
+    expect(isInputValid('US-1234 Another description P12345678')).to.equal(
+      'INVALID TICKET FORMAT: Double-check ticket number'
+    );
+  });
+});
