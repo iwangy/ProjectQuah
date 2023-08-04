@@ -10,51 +10,44 @@ function hasMultipleUSTicketNumbers(input) {
 // Function: isValidTicketNumberFormat
 // Description: Checks for valid ticket format.
 // Returns: True if ticket format is valid, False otherwise.
-// function isValidTicketNumberFormat(ticket) {
-//     const VPattern = /(?:^|\s)(V[-:\s]?\d{9})(?=\s|$)/g;
-//     const PPattern = /(?:^|\s)(P[-:\s]?\d{8})(?=\s|$)/g;
-//     const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
-//     return VPattern.test(ticket) || PPattern.test(ticket) || USPattern.test(ticket);
-// }
-
-// function isValidTicketNumberFormat(ticket) {
-//     const VPattern = /(?:^|\s)(V[-:\s]?\d{9})(?=\s|$)(?![\s\S]*\bUS[-:\s]?\d{4,5}\b)/g;
-//     const PPattern = /(?:^|\s)(P[-:\s]?\d{8})(?=\s|$)(?![\s\S]*\bUS[-:\s]?\d{4,5}\b)/g;
-//     const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
-//     console.log(VPattern.test(ticket));
-//     console.log(PPattern.test(ticket));
-//     console.log(USPattern.test(ticket));
-//     console.log(VPattern.test(ticket) || PPattern.test(ticket) || USPattern.test(ticket));
-//     return VPattern.test(ticket) || PPattern.test(ticket) || USPattern.test(ticket);
-// }
-
-// function isValidTicketNumberFormat(ticket) {
-//     const VPattern = /(?:^|\s)(V[-:\s]?\d{9})(?=\s|$)(?![\s\S]*\bUS[-:\s]?\d{4,5}\b)/g;
-//     const PPattern = /(?:^|\s)(P[-:\s]?\d{8})(?=\s|$)(?![\s\S]*\bUS[-:\s]?\d{4,5}\b)/g;
-//     const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
-
-//     const mixedTicketPattern = /\b(?:V[-:\s]?\d{9}|P[-:\s]?\d{8})\b[\s\S]*\bUS[-:\s]?\d{4,5}\b/g;
-
-//     return (
-//         (VPattern.test(ticket) || PPattern.test(ticket) || USPattern.test(ticket)) &&
-//         !mixedTicketPattern.test(ticket)
-//     );
-// }
-
 function isValidTicketNumberFormat(ticket) {
-    const VPattern = /(?:^|\s)V[-:\s]?\d{9}(?=\s|$)/g;
-    const PPattern = /(?:^|\s)P[-:\s]?\d{8}(?=\s|$)/g;
-    const USPattern = /(?:^|\s)US[-:\s]?\d{4,5}(?::)?(?:[.,;!?]|(?=\s|$))/g;
-
-    const hasUS = USPattern.test(ticket);
-    const hasV = VPattern.test(ticket);
-    const hasP = PPattern.test(ticket);
-
-    return (hasUS && !(hasV || hasP)) || (!hasUS && (hasV || hasP));
+    const VPattern = /(?:^|\s)(V[-:\s]?\d{9})(?=\s|$)/g;
+    const PPattern = /(?:^|\s)(P[-:\s]?\d{8})(?=\s|$)/g;
+    const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
+    return VPattern.test(ticket) || PPattern.test(ticket) || USPattern.test(ticket);
 }
 
+function checkMixTicketNumbers(input) {
+    const mixedPattern = /(?:(V[-:\s]?\d{9})|(P[-:\s]?\d{8})|(US[-:\s]?\d{4,5}))/g;
+    const mixedMatches = input.match(mixedPattern);
 
+    if (mixedMatches) {
+        const vMatches = mixedMatches.filter(match => /V[-:\s]?\d{9}/.test(match));
+        const pMatches = mixedMatches.filter(match => /P[-:\s]?\d{8}/.test(match));
+        const usMatches = mixedMatches.filter(match => /US[-:\s]?\d{4,5}/.test(match));
 
+        return (vMatches.length > 0 || pMatches.length > 0) && usMatches.length > 0;
+    }
+
+    return false;
+}
+
+// function test(input) {
+//     const mixedPattern = /(?:(V[-:\s]?\d{9})|(P[-:\s]?\d{8})|(US[-:\s]?\d{4,5}))/g;
+//     const mixedMatches = input.match(mixedPattern);
+//     return mixedMatches !== null && mixedMatches.length > 1;
+// }
+// function isValidTicketNumberFormat(ticket) {
+//     const VPattern = /(?:^|\s)V[-:\s]?\d{9}(?=\s|$)/g;
+//     const PPattern = /(?:^|\s)P[-:\s]?\d{8}(?=\s|$)/g;
+//     const USPattern = /(?:^|\s)US[-:\s]?\d{4,5}(?::)?(?:[.,;!?]|(?=\s|$))/g;
+
+//     const hasUS = USPattern.test(ticket);
+//     const hasV = VPattern.test(ticket);
+//     const hasP = PPattern.test(ticket);
+
+//     return (hasUS && !(hasV || hasP)) || (!hasUS && (hasV || hasP));
+// }
 
 // Function: checkVandP
 // Description: Used to split checks among V, P, and US tickets.
@@ -85,6 +78,11 @@ function hasDescription(input) {
 // Description: Checks if the input is a valid ticket format with descriptions.
 // Returns: "PASSES: EVERYTHING OK" if valid, an error message otherwise.
 function isInputValid(input) {
+
+    if (!checkMix(input)) {
+
+    }
+
     if (!isValidTicketNumberFormat(input)) {
         return "INVALID TICKET FORMAT: Double-check ticket number";
     }
@@ -130,18 +128,19 @@ module.exports = {
 // console.log(isInputValid("P12345678\n")); // F, desc
 // console.log(isInputValid("P12345678")); // F, desc
 
-// // Test cases US PASSES
+// console.log("US")
+// // // Test cases US PASSES
 // console.log(isInputValid("US-1234 Description for US ticket")); // T
 // console.log(isInputValid("US-12345 Another description")); // T
 // console.log(isInputValid("US-123456")); // false (should have 4 or 5 numbers)
 // console.log(isInputValid("US-123")); // false (should have 4 or 5 numbers)
 // console.log(isInputValid("US-1234 US-5678 US-12345")); // false (multiple US ticket numbers)
 // console.log(isInputValid("US-1234 US-1234")); // false (multiple US ticket numbers)
-// console.log(isInputValid("US-1234 US-5678 Another description")); // false (multiple US ticket numbers)
+// console.log(isInputValid("US-1234 US:5678 Another description")); // false (multiple US ticket numbers)
 // console.log(isInputValid("US-1234US-5678 Another description")); // false (multiple US ticket numbers)
 // console.log(isInputValid("US-1234")); // false (no description)
 
-// // Test Cases Description PASSES
+// // // Test Cases Description PASSES
 // console.log(isInputValid("V123456789 This is a valid description")); // true
 // console.log(isInputValid("P12345678 Another valid description")); // true
 // console.log(isInputValid("US-1234 Description for US ticket")); // true
@@ -152,4 +151,3 @@ module.exports = {
 // console.log(isInputValid("US-12345678")); // false (no description)
 // console.log(isInputValid("US-1234")); // false (no description)
 
-console.log(isInputValid('V123456789 US-1234 This is a mixed ticket description'))

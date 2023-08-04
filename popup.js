@@ -44,9 +44,9 @@ function updatePopupContent(verifyData) {
     verifyDataElement.innerHTML = "";
 
     verifyData.forEach((value, key) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `Data index ${key}: ${value}`;
-        verifyDataElement.appendChild(listItem);
+        const paragraph = document.createElement("p");
+        paragraph.textContent = `Line ${key + 1}: ${value}`;
+        verifyDataElement.appendChild(paragraph);
     });
 }
 
@@ -73,8 +73,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // fillButton.addEventListener('click', test2)
 
         // EMS EL
-        // const getValue = document.getElementById('emsButton');
-        // getValue.addEventListener('click', test3);
+        const getValue = document.getElementById('emsButton');
+        getValue.addEventListener('click', test3);
 
         // Verify EL
         const verifyButton = document.getElementById("verify");

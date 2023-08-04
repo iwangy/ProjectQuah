@@ -2,15 +2,15 @@
 let storedVerifyData = new Map();
 
 // Listen for tab updates
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'complete') {
-    // Inject content script into the updated tab
-    chrome.scripting.executeScript(tabId, { file: "contentScript.js" }, () => {
-      // Content script has been injected
-      console.log("Content script injected");
-    });
-  }
-});
+// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+//   if (changeInfo.status === 'complete') {
+//     // Inject content script into the updated tab
+//     chrome.scripting.executeScript(tabId, { file: "contentScript.js" }, () => {
+//       // Content script has been injected
+//       console.log("Content script injected");
+//     });
+//   }
+// });
 
 // Listen for messages from content script or popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
