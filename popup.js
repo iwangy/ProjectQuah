@@ -45,7 +45,15 @@ function updatePopupContent(verifyData) {
 
     verifyData.forEach((value, key) => {
         const paragraph = document.createElement("p");
-        paragraph.textContent = `Line ${key + 1}: ${value}`;
+        const lineSpan = document.createElement("span");
+        lineSpan.textContent = `Line ${key + 1}: `;
+        lineSpan.style.fontWeight = "bold";
+        paragraph.appendChild(lineSpan);
+
+        const valueSpan = document.createElement("span");
+        valueSpan.textContent = value;
+
+        paragraph.appendChild(valueSpan);
         verifyDataElement.appendChild(paragraph);
     });
 }
@@ -73,8 +81,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // fillButton.addEventListener('click', test2)
 
         // EMS EL
-        const getValue = document.getElementById('emsButton');
-        getValue.addEventListener('click', test3);
+        // const getValue = document.getElementById('emsButton');
+        // getValue.addEventListener('click', test3);
 
         // Verify EL
         const verifyButton = document.getElementById("verify");

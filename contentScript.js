@@ -103,7 +103,6 @@ function isInputValid(input) {
 
 (() => {
     let verifyData = new Map();
-    let isRowAdded = false;
 
     chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         console.log(request.action);
@@ -198,37 +197,19 @@ function isInputValid(input) {
                     await delay(500);
                 }
 
-                // if (numRows - (document.querySelector('tbody').childElementCount - 1) == 1) {
-                //     isRowAdded = false;
-                // };
-                // console.log(numRows)
-                // const lastRowSelector = document.querySelector(`tr[data-kendo-grid-item-index="${numRows}"]`)
-                // clickElement(lastRowSelector);
-                // console.log("click");
-                
-                // if (!isRowAdded) {
-                //     clickElement('#dailytimeregistrationtable_create');
-                //     await delay(500);
-                //     isRowAdded = true;
-                // }
-
                 for (let i = 0; i < document.querySelector('tbody').childElementCount - 1; i++) {
                     const dataIndex = i; // Store the current value of i in a variable
                     const trSelector = `tr[data-kendo-grid-item-index="${dataIndex}"]`;
                     const tdSelector = `${trSelector} td[data-kendo-grid-column-index="8"]`;
                     const engSelector = `${trSelector} td[data-kendo-grid-column-index="4"]`;
                     const engNo = document.querySelector(engSelector).textContent;
-                    console.log(engNo);
+   
                     if(engNo == "641050.0120" || engNo == "641050.0115" || engNo == "641050.0117") {
                         console.log(engNo)
                         verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()))
                         console.log(document.querySelector(tdSelector).textContent);
                         console.log(isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()));
                     }
-                    
-                    // verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()))
-                    // console.log(document.querySelector(tdSelector).textContent);
-                    // console.log(isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()));
                 }
 
                 console.log(verifyData);

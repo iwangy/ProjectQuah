@@ -1,5 +1,5 @@
 body {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Arial, sans-serif; /* Changed font-family to a more common sans-serif font */
   margin: 0;
   padding: 0;
   background-color: #cec7ba;
@@ -10,47 +10,46 @@ body {
 }
 
 .container {
-  width: 350px;
-  padding: 20px;
+  width: 280px; /* Reduced the width to make it more compact */
+  padding: 10px; /* Decreased padding for better space utilization */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #adccc6;
   border-radius: 8px;
 }
 
 .title {
-  font-size: 20px;
+  font-size: 18px; /* Slightly reduced font size for the title */
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Reduced margin for better spacing */
   color: #0e3833;
 }
 
 .content {
   border-top: 1px solid #0e3833;
-  padding-top: 20px;
+  padding-top: 10px; /* Decreased padding for better space utilization */
 }
 
 .input-section {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px; /* Reduced margin for better spacing */
 }
 
 .input-section label {
   flex: 1;
-  margin-right: 10px;
+  margin-right: 5px; /* Reduced margin for better spacing */
   font-weight: bold;
   color: #0e3833;
 }
 
 .input-section input,
 .input-section select {
-  flex: 2; /* Updated width to occupy more space */
-  padding: 8px;
+  flex: 1; /* Evenly distribute the space */
+  padding: 6px; /* Reduced padding for better space utilization */
   border: 1px solid #0e3833;
   border-radius: 4px;
   outline: none;
   transition: border-color 0.3s ease;
-  max-width: calc(100% - 200px); /* Added max-width to prevent overflow */
 }
 
 .input-section input::placeholder {
@@ -59,60 +58,48 @@ body {
 
 .input-section input:focus,
 .input-section select:focus {
-  border-color: #28a745; /* Updated color for focus state - dark green */
+  border-color: #28a745;
 }
 
 #hours {
-  margin-left: 10px;
-  max-width: 60px;
-}
-
-#hours,
-#description {
-  flex: 1;
-  margin-right: 5px; /* Adjust the spacing between elements */
-  padding: 8px;
-  border: 1px solid #0e3833;
-  border-radius: 4px;
-  outline: none;
-  transition: border-color 0.3s ease;
+  margin-left: 5px; /* Reduced margin for better spacing */
+  max-width: 50px; /* Slightly reduced max-width for the hours input */
 }
 
 #description {
-  /* Adjust the width of the additional input field to fit in-line with the select dropdown */
-  max-width: 120px;
+  max-width: 100px;
 }
 
 .input-section button {
-  flex: 1; /* Updated width to occupy more space */
-  margin-left: 10px;
-  padding: 8px;
-  background-color: #0e3833; /* Updated color for buttons - dark green */
+  padding: 6px; /* Reduced padding for better space utilization */
+  background-color: #0e3833;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  max-width: calc(100% - 100px); /* Added max-width to prevent overflow */
+  flex: 1; /* Evenly distribute the space */
 }
 
 .input-section button:hover {
-  background-color: #1a584f; /* Darker shade for hover effect */
+  background-color: #1a584f;
 }
 
 button,
 select {
   font-family: Arial, sans-serif;
+  font-size: 14px; /* Adjusted font size for consistency */
 }
 
 #verifyData {
-  font-family: Arial, sans-serif;
-  font-size: 16px; /* Increase the font size */
-  color: #0e3833; /* Set the text color */
-  margin-top: 10px; /* Add some spacing at the top */
-  border-top: 1px solid #0e3833; /* Add a top border for separation */
+  font-size: 14px; /* Adjusted font size for consistency */
+  color: #0e3833;
+  margin-top: 10px;
+  border-top: 1px solid #0e3833;
+  padding-left: 0;
 }
 
 #verifyData p {
-  margin: 5px 0; /* Add some vertical spacing between paragraphs */
+  margin: 5px 0;
+  animation: fadeIn 0.5s ease;
 }
