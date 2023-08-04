@@ -94,10 +94,10 @@ describe('isInputValid', () => {
     );
 
     expect(isInputValid('V123456789 US-1234 This is a mixed ticket description')).to.equal(
-      'INVALID TICKET FORMAT: Double-check ticket number'
+      'INVALID TICKET FORMAT: SIM & US Tickets cannot be in the same line'
     );
     expect(isInputValid('US-1234 Another description P12345678')).to.equal(
-      'INVALID TICKET FORMAT: Double-check ticket number'
+      'INVALID TICKET FORMAT: SIM & US Tickets cannot be in the same line'
     );
   });
 });

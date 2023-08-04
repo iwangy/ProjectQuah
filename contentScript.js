@@ -27,31 +27,41 @@ function sendVerifyDataToPopup(verifyData) {
 
 // TICKET VALIDATION FUNCTIONS
 function hasMultipleUSTicketNumbers(input) {
-    const USPattern = /\bUS[-:\s]?(\d{4,5})\b/g;
+    const USPattern = /\bus[-:\s]?(\d{4,5})\b/g;
     const matches = input.match(USPattern);
     return matches ? matches.length <= 1 : false;
 }
 
-function isValidTicketNumberFormat(ticket) {
-    const VPattern = /(?:^|\s)V[-:\s]?\d{9}(?=\s|$)/g;
-    const PPattern = /(?:^|\s)P[-:\s]?\d{8}(?=\s|$)/g;
-    const USPattern = /(?:^|\s)US[-:\s]?\d{4,5}(?::)?(?:[.,;!?]|(?=\s|$))/g;
+function isValidTicketNumberFormat(input) {
+    const VPattern = /(?:^|\s)(v[-:\s]?\d{9})(?=\s|$)/g;
+    const PPattern = /(?:^|\s)(p[-:\s]?\d{8})(?=\s|$)/g;
+    const USPattern = /(?:^|\s)(us[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
+    return VPattern.test(input) || PPattern.test(input) || USPattern.test(input);
+}
 
-    const hasUS = USPattern.test(ticket);
-    const hasV = VPattern.test(ticket);
-    const hasP = PPattern.test(ticket);
+function checkMixTicketNumbers(input) {
+    const mixedPattern = /(?:(v[-:\s]?\d{9})|(p[-:\s]?\d{8})|(us[-:\s]?\d{4,5}))/g;
+    const mixedMatches = input.match(mixedPattern);
 
-    return (hasUS && !(hasV || hasP)) || (!hasUS && (hasV || hasP));
+    if (mixedMatches) {
+        const vMatches = mixedMatches.filter(match => /v[-:\s]?\d{9}/.test(match));
+        const pMatches = mixedMatches.filter(match => /p[-:\s]?\d{8}/.test(match));
+        const usMatches = mixedMatches.filter(match => /us[-:\s]?\d{4,5}/.test(match));
+
+        return (vMatches.length > 0 || pMatches.length > 0) && usMatches.length > 0;
+    }
+
+    return false;
 }
 
 function checkVandP(input) {
-    const VPattern = /^V\d{9}(?:\s|$)/;
-    const PPattern = /^P\d{8}(?:\s|$)/;
+    const VPattern = /^v\d{9}(?:\s|$)/;
+    const PPattern = /^p\d{8}(?:\s|$)/;
     return VPattern.test(input) || PPattern.test(input);
 }
 
 function checkUSTicket(input) {
-    const USPattern = /(?:^|\s)(US[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
+    const USPattern = /(?:^|\s)(us[-:\s]?\d{4,5})(?::)?(?:[.,;!?]|(?=\s|$))/g;
     if (USPattern.test(input)) {
         return hasMultipleUSTicketNumbers(input);
     }
@@ -59,11 +69,15 @@ function checkUSTicket(input) {
 }
 
 function hasDescription(input) {
-    const descriptionPattern = /(?:(?<=^|\s)(V[-:\s]?\d{9}|P[-:\s]?\d{8}|US[-:\s]?\d{4,5})(?::\s*|\s+)(.+)|(.+?)\s+(V[-:\s]?\d{9}|P[-:\s]?\d{8}|US[-:\s]?\d{4,5}))/;
+    const descriptionPattern = /(?:(?<=^|\s)(v[-:\s]?\d{9}|p[-:\s]?\d{8}|us[-:\s]?\d{4,5})(?::\s*|\s+)(.+)|(.+?)\s+(v[-:\s]?\d{9}|p[-:\s]?\d{8}|us[-:\s]?\d{4,5}))/;
     return descriptionPattern.test(input);
 }
 
 function isInputValid(input) {
+    if (checkMixTicketNumbers(input)) {
+        return "INVALID TICKET FORMAT: SIM & US Tickets cannot be in the same line"
+    }
+
     if (!isValidTicketNumberFormat(input)) {
         return "INVALID TICKET FORMAT: Double-check ticket number";
     }
@@ -90,7 +104,7 @@ function isInputValid(input) {
 (() => {
     let verifyData = new Map();
     let isRowAdded = false;
-    
+
     chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         console.log(request.action);
         const numRows = document.querySelector('tbody').childElementCount - 1;
@@ -172,27 +186,49 @@ function isInputValid(input) {
             
             case "verify":
                 verifyData.clear();
-                if (numRows - (document.querySelector('tbody').childElementCount - 1) == 1) {
-                    isRowAdded = false;
-                };
+
+                const entryCount = document.querySelector('tbody').childElementCount - 1;
+                const trSelector = `tr[data-kendo-grid-item-index="${entryCount}"]`;
+                const engSelector = `${trSelector} td[data-kendo-grid-column-index="4"]`;
+                const engNo = document.querySelector(engSelector).textContent;
+                console.log(engNo + "hi");
+                if(engNo == "") {
+                    console.log
+                    clickElement('#dailytimeregistrationtable_create');
+                    await delay(500);
+                }
+
+                // if (numRows - (document.querySelector('tbody').childElementCount - 1) == 1) {
+                //     isRowAdded = false;
+                // };
                 // console.log(numRows)
                 // const lastRowSelector = document.querySelector(`tr[data-kendo-grid-item-index="${numRows}"]`)
                 // clickElement(lastRowSelector);
                 // console.log("click");
                 
-                if (!isRowAdded) {
-                    clickElement('#dailytimeregistrationtable_create');
-                    await delay(500);
-                    isRowAdded = true;
-                }
+                // if (!isRowAdded) {
+                //     clickElement('#dailytimeregistrationtable_create');
+                //     await delay(500);
+                //     isRowAdded = true;
+                // }
 
                 for (let i = 0; i < document.querySelector('tbody').childElementCount - 1; i++) {
                     const dataIndex = i; // Store the current value of i in a variable
                     const trSelector = `tr[data-kendo-grid-item-index="${dataIndex}"]`;
                     const tdSelector = `${trSelector} td[data-kendo-grid-column-index="8"]`;
-                    verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector).textContent))
-                    console.log(document.querySelector(tdSelector).textContent);
-                    console.log(isInputValid(document.querySelector(tdSelector).textContent));
+                    const engSelector = `${trSelector} td[data-kendo-grid-column-index="4"]`;
+                    const engNo = document.querySelector(engSelector).textContent;
+                    console.log(engNo);
+                    if(engNo == "641050.0120" || engNo == "641050.0115" || engNo == "641050.0117") {
+                        console.log(engNo)
+                        verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()))
+                        console.log(document.querySelector(tdSelector).textContent);
+                        console.log(isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()));
+                    }
+                    
+                    // verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()))
+                    // console.log(document.querySelector(tdSelector).textContent);
+                    // console.log(isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()));
                 }
 
                 console.log(verifyData);

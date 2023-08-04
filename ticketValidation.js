@@ -32,23 +32,6 @@ function checkMixTicketNumbers(input) {
     return false;
 }
 
-// function test(input) {
-//     const mixedPattern = /(?:(V[-:\s]?\d{9})|(P[-:\s]?\d{8})|(US[-:\s]?\d{4,5}))/g;
-//     const mixedMatches = input.match(mixedPattern);
-//     return mixedMatches !== null && mixedMatches.length > 1;
-// }
-// function isValidTicketNumberFormat(ticket) {
-//     const VPattern = /(?:^|\s)V[-:\s]?\d{9}(?=\s|$)/g;
-//     const PPattern = /(?:^|\s)P[-:\s]?\d{8}(?=\s|$)/g;
-//     const USPattern = /(?:^|\s)US[-:\s]?\d{4,5}(?::)?(?:[.,;!?]|(?=\s|$))/g;
-
-//     const hasUS = USPattern.test(ticket);
-//     const hasV = VPattern.test(ticket);
-//     const hasP = PPattern.test(ticket);
-
-//     return (hasUS && !(hasV || hasP)) || (!hasUS && (hasV || hasP));
-// }
-
 // Function: checkVandP
 // Description: Used to split checks among V, P, and US tickets.
 function checkVandP(input) {
@@ -79,8 +62,8 @@ function hasDescription(input) {
 // Returns: "PASSES: EVERYTHING OK" if valid, an error message otherwise.
 function isInputValid(input) {
 
-    if (!checkMix(input)) {
-
+    if (checkMixTicketNumbers(input)) {
+        return "INVALID TICKET FORMAT: SIM & US Tickets cannot be in the same line"
     }
 
     if (!isValidTicketNumberFormat(input)) {
