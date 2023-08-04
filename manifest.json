@@ -1,7 +1,7 @@
 {
-    "name": "Project Quah",
+    "name": "Front Street",
     "version": "0.1.0",
-    "description": "For efficient deltek entry",
+    "description": "EMS description validation",
     "permissions": ["storage", "tabs", "activeTab", "scripting"],
     "host_permissions": ["https://*.mossadams.com/*"],
     "options_ui" : {
@@ -30,9 +30,9 @@
     ],
     "action": {
       "default_icon": {
-        "16": "assets/ext-icon.png",
-        "24": "assets/ext-icon.png",
-        "32": "assets/ext-icon.png"
+        "16": "assets/moss.png",
+        "24": "assets/moss.png",
+        "32": "assets/moss.png"
       },
       "default_title": "Front Street",
       "default_popup": "popup.html"

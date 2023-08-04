@@ -1,8 +1,8 @@
 body {
-  font-family: Arial, sans-serif; /* Changed font-family to a more common sans-serif font */
+  font-family: 'Montserrat', Arial, sans-serif; /* Changed font-family to a more common sans-serif font */
   margin: 0;
   padding: 0;
-  background-color: #cec7ba;
+  background-color: #adccc6;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,7 +12,6 @@ body {
 .container {
   width: 280px; /* Reduced the width to make it more compact */
   padding: 10px; /* Decreased padding for better space utilization */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #adccc6;
   border-radius: 8px;
 }
@@ -61,6 +60,12 @@ body {
   border-color: #28a745;
 }
 
+/* Add hover effect for buttons */
+.input-section button:hover {
+  background-color: #1a584f;
+  transform: scale(1.05); /* Apply scale transformation on hover */
+}
+
 #hours {
   margin-left: 5px; /* Reduced margin for better spacing */
   max-width: 50px; /* Slightly reduced max-width for the hours input */
@@ -102,4 +107,13 @@ select {
 #verifyData p {
   margin: 5px 0;
   animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
