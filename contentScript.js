@@ -106,7 +106,6 @@ function isInputValid(input) {
 
     chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         console.log(request.action);
-        const numRows = document.querySelector('tbody').childElementCount - 1;
         switch (request.action) {
             case "daily":
                 console.log("1");
@@ -186,6 +185,7 @@ function isInputValid(input) {
                 verifyData.clear();
 
                 const entryCount = document.querySelector('tbody').childElementCount - 1;
+                console.log(entryCount)
 
                 for (let i = 0; i < entryCount; i++) {
                     const dataIndex = i; // Store the current value of i in a variable
