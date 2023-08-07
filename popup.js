@@ -1,70 +1,69 @@
 import { getActiveTabURL } from "./utils.js";
 
-const test = async e => {
-    console.log("boop");
-    const activeTab = await getActiveTabURL();
-    console.log(activeTab.id)
+const test = async () => {
+  console.log("boop");
+  const activeTab = await getActiveTabURL();
+  console.log(activeTab.id);
 
-    chrome.tabs.sendMessage(activeTab.id, { action: "daily" });
+  chrome.tabs.sendMessage(activeTab.id, { action: "daily" });
 };
 
-const test4 = async e => {
-    console.log("bam");
-    const activeTab = await getActiveTabURL();
-    console.log(activeTab.id)
+const test4 = async () => {
+  console.log("bam");
+  const activeTab = await getActiveTabURL();
+  console.log(activeTab.id);
 
-    chrome.tabs.sendMessage(activeTab.id, { action: "verify" });
-}
+  chrome.tabs.sendMessage(activeTab.id, { action: "verify" });
+};
 
 function updatePopupContent(verifyData) {
-    const verifyDataElement = document.getElementById("verifyData");
-    verifyDataElement.innerHTML = "";
+  const verifyDataElement = document.getElementById("verifyData");
+  verifyDataElement.innerHTML = "";
 
-    verifyData.forEach((value, key) => {
-        const paragraph = document.createElement("p");
-        const lineSpan = document.createElement("span");
-        lineSpan.textContent = `Line ${key + 1}: `;
-        lineSpan.style.fontWeight = "bold";
-        paragraph.appendChild(lineSpan);
+  verifyData.forEach((value, key) => {
+    const paragraph = document.createElement("p");
+    const lineSpan = document.createElement("span");
+    lineSpan.textContent = `Line ${key + 1}: `;
+    lineSpan.style.fontWeight = "bold";
+    paragraph.appendChild(lineSpan);
 
-        const valueSpan = document.createElement("span");
-        valueSpan.textContent = value;
+    const valueSpan = document.createElement("span");
+    valueSpan.textContent = value;
 
-        paragraph.appendChild(valueSpan);
-        verifyDataElement.appendChild(paragraph);
-    });
+    paragraph.appendChild(valueSpan);
+    verifyDataElement.appendChild(paragraph);
+  });
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "sendVerifyData") {
-        const storedVerifyData = new Map(request.data);
-        updatePopupContent(storedVerifyData);
-    }
+  if (request.action === "sendVerifyData") {
+    const storedVerifyData = new Map(request.data);
+    updatePopupContent(storedVerifyData);
+  }
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const activeTab = await getActiveTabURL();
-    console.log(activeTab.url);
-    
-    if (activeTab.url.includes("iaccess.mossadams.com/workspace")) {
-        console.log("You are currently on the timesheet page.");
+  const activeTab = await getActiveTabURL();
+  console.log(activeTab.url);
 
-        // Test Button EL
-        const myButton = document.getElementById("myButton");
-        myButton.addEventListener("click", test);
+  if (activeTab.url.includes("iaccess.mossadams.com/workspace")) {
+    console.log("You are currently on the timesheet page.");
 
-        // Verify EL
-        const verifyButton = document.getElementById("verify");
-        verifyButton.addEventListener('click', test4);
+    // Test Button Event Listener
+    const myButton = document.getElementById("myButton");
+    myButton.addEventListener("click", test);
 
-        chrome.runtime.sendMessage({ action: "getVerifyData" }, response => {
-            const storedVerifyData = response.data;
-            console.log(storedVerifyData);
-            updatePopupContent(storedVerifyData);
-        });
-    } else {
-        const container = document.getElementsByClassName("container")[0];
-        container.innerHTML = '<div class="title"> This is not an iAccess page.</div>';
-    }
+    // Verify Button Event Listener
+    const verifyButton = document.getElementById("verify");
+    verifyButton.addEventListener('click', test4);
 
+    chrome.runtime.sendMessage({ action: "getVerifyData" }, response => {
+      const storedVerifyData = response.data;
+      console.log(storedVerifyData);
+      updatePopupContent(storedVerifyData);
+    });
+  } else {
+    const container = document.querySelector(".container");
+    container.innerHTML = '<div class="title"> This is not an iAccess page.</div>';
+  }
 });

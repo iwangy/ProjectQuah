@@ -1,29 +1,28 @@
 // Background script to store the verifyData
-let storedVerifyData = new Map();
-
-// Listen for tab updates
-// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//   if (changeInfo.status === 'complete') {
-//     // Inject content script into the updated tab
-//     chrome.scripting.executeScript(tabId, { file: "contentScript.js" }, () => {
-//       // Content script has been injected
-//       console.log("Content script injected");
-//     });
-//   }
-// });
+const verifyDataMap = new Map();
 
 // Listen for messages from content script or popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "sendVerifyData") {
-    // Update storedVerifyData with the received data
-    storedVerifyData = new Map(request.data);
-  } else if (request.action === "getVerifyData") {
-    // Respond to popup with the stored verifyData
-    sendResponse({ data: Array.from(storedVerifyData.entries()) });
+  // Use switch statements for better readability and maintainability
+  switch (request.action) {
+    case "sendVerifyData":
+      // Update verifyDataMap with the received data
+      // Use destructuring assignment to directly update the map.
+      ({ data } = request);
+      verifyDataMap.clear();
+      data.forEach(([key, value]) => verifyDataMap.set(key, value));
+      break;
+    case "getVerifyData":
+      // Respond to the popup with the stored verifyData
+      sendResponse({ data: Array.from(verifyDataMap.entries()) });
+      break;
+    default:
+      // Handle any other actions if needed
+      break;
   }
 });
 
-// Function to get the stored verifyData
+// It's better to return a copy of the data to avoid direct mutation.
 function getStoredVerifyData() {
-  return storedVerifyData;
+  return new Map(verifyDataMap);
 }

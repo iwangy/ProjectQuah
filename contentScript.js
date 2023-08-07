@@ -65,7 +65,7 @@ function checkUSTicket(input) {
     if (USPattern.test(input)) {
         return hasMultipleUSTicketNumbers(input);
     }
-    return "INVALID TICKET FORMAT: Double-check ticket number"; // The US ticket number format is invalid or multiple US tickets on the same line
+    return "INVALID TICKET FORMAT: Double-check ticket number";
 }
 
 function hasDescription(input) {
@@ -180,35 +180,39 @@ function isInputValid(input) {
                     await delay(500);
                     clickElement('#dailytimeregistrationtable_create');
                 }
-
                 break;
             
             case "verify":
                 verifyData.clear();
 
                 const entryCount = document.querySelector('tbody').childElementCount - 1;
-                const trSelector = `tr[data-kendo-grid-item-index="${entryCount}"]`;
-                const engSelector = `${trSelector} td[data-kendo-grid-column-index="4"]`;
-                const engNo = document.querySelector(engSelector).textContent;
-                console.log(engNo + "hi");
-                if(engNo == "") {
-                    console.log
-                    clickElement('#dailytimeregistrationtable_create');
-                    await delay(500);
-                }
 
-                for (let i = 0; i < document.querySelector('tbody').childElementCount - 1; i++) {
+                for (let i = 0; i < entryCount; i++) {
                     const dataIndex = i; // Store the current value of i in a variable
+
+                    const engNo1 = document.querySelector(`tr[data-kendo-grid-item-index="${dataIndex}"] td[data-kendo-grid-column-index="4"] input`);
+                    let engNo = "";
+                    if (engNo1 != null) {
+                        engNo = document.querySelector(`tr[data-kendo-grid-item-index="${dataIndex}"] td[data-kendo-grid-column-index="4"] input`).getAttribute("title")
+                    } else {
+                        engNo = document.querySelector(`tr[data-kendo-grid-item-index="${dataIndex}"] td[data-kendo-grid-column-index="4"] dm-table-field-element`).getAttribute("title")
+                    }
+
                     const trSelector = `tr[data-kendo-grid-item-index="${dataIndex}"]`;
-                    const tdSelector = `${trSelector} td[data-kendo-grid-column-index="8"]`;
-                    const engSelector = `${trSelector} td[data-kendo-grid-column-index="4"]`;
-                    const engNo = document.querySelector(engSelector).textContent;
+                    const tdSelector1 = `${trSelector} td[data-kendo-grid-column-index="8"] input`;
+                    const tdSelector2 = `${trSelector} td[data-kendo-grid-column-index="8"] dm-table-field-element`
    
                     if(engNo == "641050.0120" || engNo == "641050.0115" || engNo == "641050.0117") {
-                        console.log(engNo)
-                        verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()))
-                        console.log(document.querySelector(tdSelector).textContent);
-                        console.log(isInputValid(document.querySelector(tdSelector).textContent.toLowerCase()));
+                        const thing1 = document.querySelector(tdSelector1)
+
+                        if (thing1 != null) {
+                            verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector1).getAttribute("title").toLowerCase()))
+                            console.log(document.querySelector(tdSelector1).getAttribute("title").toLowerCase())
+                        } else {
+                            verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector2).getAttribute("title").toLowerCase()))
+                            console.log(document.querySelector(tdSelector2).getAttribute("title").toLowerCase())
+                        }
+
                     }
                 }
 
