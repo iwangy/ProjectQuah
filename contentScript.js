@@ -184,7 +184,7 @@ function isInputValid(input) {
             case "verify":
                 verifyData.clear();
 
-                const entryCount = document.querySelector('tbody').childElementCount - 1;
+                const entryCount = document.querySelector('tbody').childElementCount;
                 console.log(entryCount)
 
                 for (let i = 0; i < entryCount; i++) {
