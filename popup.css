@@ -11,15 +11,28 @@ body {
 
 .container {
   width: 280px; /* Reduced the width to make it more compact */
-  padding: 10px; /* Decreased padding for better space utilization */
+  padding: 14px; /* Decreased padding for better space utilization */
   background-color: #adccc6;
-  border-radius: 8px;
+}
+
+.header {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .title {
   font-size: 18px; /* Slightly reduced font size for the title */
   font-weight: bold;
-  margin-bottom: 15px; /* Reduced margin for better spacing */
+  /* margin-bottom: 15px; Reduced margin for better spacing */
+  color: #0e3833;
+}
+
+.subtitle {
+  font-size: 13px; /* Slightly reduced font size for the title */
+  font-weight: bold;
+  /* margin-bottom: 15px; Reduced margin for better spacing */
   color: #0e3833;
 }
 
@@ -99,7 +112,8 @@ select {
 #verifyData {
   font-size: 14px; /* Adjusted font size for consistency */
   color: #0e3833;
-  margin-top: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
   border-top: 1px solid #0e3833;
   padding-left: 0;
 }
