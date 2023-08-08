@@ -5,16 +5,16 @@
     "permissions": ["storage", "tabs", "activeTab", "scripting"],
     "host_permissions": ["https://*.mossadams.com/*"],
     "options_ui" : {
-      "page": "options.html",
+      "page": "./popups/options.html",
       "open_in_tab": false
     },
     "background": {
-      "service_worker": "background.js"
+      "service_worker": "./scripts/background.js"
     },
     "content_scripts": [
       {
         "matches": ["https://*.mossadams.com/*"],
-        "js": ["contentScript.js"]
+        "js": ["./scripts/contentScript.js"]
       }
     ],
     "web_accessible_resources": [
@@ -31,7 +31,7 @@
         "32": "assets/moss.png"
       },
       "default_title": "Front Street",
-      "default_popup": "popup.html"
+      "default_popup": "./popups/popup.html"
     },
     "manifest_version": 3
 }

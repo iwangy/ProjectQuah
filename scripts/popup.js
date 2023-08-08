@@ -1,4 +1,4 @@
-import { getActiveTabURL } from "./utils.js";
+import { getActiveTabURL } from "../helpers/utils.js";
 
 const test = async () => {
   console.log("boop");
