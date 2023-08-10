@@ -73,7 +73,7 @@ function hasDescription(input) {
     return descriptionPattern.test(input);
 }
 
-function isInputValid(input) {
+async function isInputValid(input) {
     if (checkMixTicketNumbers(input)) {
         return "INVALID TICKET FORMAT: SIM & US Tickets cannot be in the same line"
     }
@@ -206,11 +206,31 @@ function isInputValid(input) {
                         const thing1 = document.querySelector(tdSelector1)
 
                         if (thing1 != null) {
-                            verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector1).getAttribute("title").toLowerCase()))
+                            verifyData.set(dataIndex, await isInputValid(document.querySelector(tdSelector1).getAttribute("title").toLowerCase()))
                             console.log(document.querySelector(tdSelector1).getAttribute("title").toLowerCase())
+
+                            const descResponse = await isInputValid(document.querySelector(tdSelector1).getAttribute("title").toLowerCase())
+                            console.log(descResponse)
+                            if (descResponse.includes("INVALID")) {
+                                console.log("INVALID!!")
+                                document.querySelector(tdSelector1).style.backgroundColor = "rgb(179,58,58)";
+                            } else {
+                                console.log("IT'S OK")
+                                document.querySelector(tdSelector1).style.backgroundColor = "white";
+                            }
                         } else {
-                            verifyData.set(dataIndex, isInputValid(document.querySelector(tdSelector2).getAttribute("title").toLowerCase()))
+                            verifyData.set(dataIndex, await isInputValid(document.querySelector(tdSelector2).getAttribute("title").toLowerCase()))
                             console.log(document.querySelector(tdSelector2).getAttribute("title").toLowerCase())
+
+                            const descResponse = await isInputValid(document.querySelector(tdSelector2).getAttribute("title").toLowerCase())
+                            console.log(descResponse)
+                            if (descResponse.includes("INVALID")) {
+                                console.log("INVALID!!")
+                                document.querySelector(tdSelector2).style.backgroundColor = "rgb(179,58,58)";
+                            } else {
+                                console.log("IT'S OK")
+                                document.querySelector(tdSelector2).style.backgroundColor = "white";
+                            }
                         }
 
                     }
