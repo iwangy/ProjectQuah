@@ -65,7 +65,7 @@ function checkUSTicket(input) {
     if (USPattern.test(input)) {
         return hasMultipleUSTicketNumbers(input);
     }
-    return "INVALID TICKET FORMAT: Double-check ticket number";
+    return "INVALID TICKET FORMAT: Double-check ticket number ❌";
 }
 
 function hasDescription(input) {
@@ -75,30 +75,30 @@ function hasDescription(input) {
 
 async function isInputValid(input) {
     if (checkMixTicketNumbers(input)) {
-        return "INVALID TICKET FORMAT: SIM & US Tickets cannot be in the same line"
+        return "INVALID TICKET FORMAT: SIM & US Tickets cannot be in the same line ❌"
     }
 
     if (!isValidTicketNumberFormat(input)) {
-        return "INVALID TICKET FORMAT: Double-check ticket number";
+        return "WARNING: Entry may need a ticket number ❌";
     }
 
     if (checkVandP(input)) {
         if (hasDescription(input)) {
-            return "PASSES: EVERYTHING OK";
+            return "PASSES: Valid Entry ✅";
         } else {
-            return "INVALID TICKET FORMAT: Please add a description";
+            return "INVALID TICKET FORMAT: Please add a description ❌";
         }
     }
 
     if (checkUSTicket(input)) {
         if (hasDescription(input)) {
-            return "PASSES: EVERYTHING OK";
+            return "PASSES: Valid Entry ✅";
         } else {
-            return "INVALID TICKET FORMAT: Please add a description";
+            return "INVALID TICKET FORMAT: Please add a description ❌";
         }
     }
 
-    return "INVALID TICKET FORMAT: Please only have 1 US ticket per entry";
+    return "INVALID TICKET FORMAT: Please only have 1 US ticket per entry ❌";
 }
 
 (() => {
@@ -210,24 +210,30 @@ async function isInputValid(input) {
                             console.log(document.querySelector(tdSelector1).getAttribute("title").toLowerCase())
 
                             const descResponse = await isInputValid(document.querySelector(tdSelector1).getAttribute("title").toLowerCase())
-                            if (descResponse.includes("INVALID")) {
+                            if (descResponse.includes("INVALID") || descResponse.includes("WARNING")) {
                                 console.log("INVALID!!")
-                                document.querySelector(tdSelector1).style.backgroundColor = "rgb(179,58,58)";
+                                // document.querySelector(tdSelector1).style.backgroundColor = "rgb(179,58,58)";
+                                document.querySelector(tdSelector1).style.color = "red";
+
                             } else {
                                 console.log("IT'S OK")
                                 document.querySelector(tdSelector1).style.backgroundColor = "white";
+                                document.querySelector(tdSelector1).style.color = "black";
                             }
                         } else {
                             verifyData.set(dataIndex, await isInputValid(document.querySelector(tdSelector2).getAttribute("title").toLowerCase()))
                             console.log(document.querySelector(tdSelector2).getAttribute("title").toLowerCase())
 
                             const descResponse = await isInputValid(document.querySelector(tdSelector2).getAttribute("title").toLowerCase())
-                            if (descResponse.includes("INVALID")) {
+                            if (descResponse.includes("INVALID") || descResponse.includes("WARNING")) {
                                 console.log("INVALID!!")
-                                document.querySelector(tdSelector2).style.backgroundColor = "rgb(179,58,58)";
+                                // document.querySelector(tdSelector2).style.backgroundColor = "rgb(179,58,58)";
+                                document.querySelector(tdSelector2 + " span").style.color = "red";
+                                
                             } else {
                                 console.log("IT'S OK")
-                                document.querySelector(tdSelector2).style.backgroundColor = "white";
+                                document.querySelector(tdSelector2 + " span").style.backgroundColor = "white";
+                                document.querySelector(tdSelector2 + " span").style.color = "black";
                             }
                         }
 
