@@ -79,7 +79,7 @@ async function isInputValid(input) {
     }
 
     if (!isValidTicketNumberFormat(input)) {
-        return "WARNING: Entry may need a ticket number ❌";
+        return "WARNING: Entry may need a valid ticket number ❌";
     }
 
     if (checkVandP(input)) {
