@@ -38,13 +38,13 @@ function updatePopupContent(verifyData) {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "sendVerifyData") {
     const storedVerifyData = new Map(request.data);
+    console.log(storedVerifyData)
     updatePopupContent(storedVerifyData);
   }
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
   const activeTab = await getActiveTabURL();
-  console.log(activeTab.url);
 
   if (activeTab.url.includes("iaccess.mossadams.com/workspace")) {
     console.log("You are currently on the timesheet page.");
@@ -58,7 +58,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     verifyButton.addEventListener('click', test4);
 
     chrome.runtime.sendMessage({ action: "getVerifyData" }, response => {
-      const storedVerifyData = response.data;
+      const storedVerifyData = new Map(response.data);
+      console.log("OK");
       console.log(storedVerifyData);
       updatePopupContent(storedVerifyData);
     });

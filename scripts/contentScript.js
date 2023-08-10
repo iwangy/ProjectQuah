@@ -210,7 +210,6 @@ async function isInputValid(input) {
                             console.log(document.querySelector(tdSelector1).getAttribute("title").toLowerCase())
 
                             const descResponse = await isInputValid(document.querySelector(tdSelector1).getAttribute("title").toLowerCase())
-                            console.log(descResponse)
                             if (descResponse.includes("INVALID")) {
                                 console.log("INVALID!!")
                                 document.querySelector(tdSelector1).style.backgroundColor = "rgb(179,58,58)";
@@ -223,7 +222,6 @@ async function isInputValid(input) {
                             console.log(document.querySelector(tdSelector2).getAttribute("title").toLowerCase())
 
                             const descResponse = await isInputValid(document.querySelector(tdSelector2).getAttribute("title").toLowerCase())
-                            console.log(descResponse)
                             if (descResponse.includes("INVALID")) {
                                 console.log("INVALID!!")
                                 document.querySelector(tdSelector2).style.backgroundColor = "rgb(179,58,58)";
