@@ -58,6 +58,7 @@ The `popup.js` script is responsible for the extension's popup UI that appears w
 - **0.1.0**: Initial release of Front Street Chrome Extension.
 - **1.0.1**: Add color prompts to invalid entries
 - **1.0.2**: Fix error on reopening extension mappings
+- **1.1.1**: Fix extension to accomodate new maconomy upgrade
 
 ## Contact
 
