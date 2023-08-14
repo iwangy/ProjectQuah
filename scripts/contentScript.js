@@ -109,7 +109,7 @@ async function isInputValid(input) {
         switch (request.action) {
             case "daily":
                 console.log("1");
-                clickElement('#dailytimeregistrationtable_create');
+                clickElement('[dm-data-id="action_append"]');
                 break;
 
             case "engno":

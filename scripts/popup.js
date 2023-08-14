@@ -46,7 +46,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 document.addEventListener("DOMContentLoaded", async () => {
   const activeTab = await getActiveTabURL();
 
-  if (activeTab.url.includes("iaccess.mossadams.com/workspace")) {
+  if (activeTab.url.includes("deltek.mossadams.com/workspace")) {
     console.log("You are currently on the timesheet page.");
 
     // Test Button Event Listener
