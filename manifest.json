@@ -1,6 +1,6 @@
 {
     "name": "Front Street",
-    "version": "0.1.0",
+    "version": "1.1.1",
     "description": "EMS description validation - Made by Ian Wang",
     "permissions": ["storage", "tabs", "activeTab", "scripting"],
     "host_permissions": ["https://*.mossadams.com/*"],
@@ -28,7 +28,8 @@
       "default_icon": {
         "16": "assets/moss.png",
         "24": "assets/moss.png",
-        "32": "assets/moss.png"
+        "32": "assets/moss.png",
+        "128": "assets/moss.png"
       },
       "default_title": "Front Street",
       "default_popup": "./popups/popup.html"
