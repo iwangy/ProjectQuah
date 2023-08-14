@@ -1,6 +1,6 @@
 # ProjectQuah - Front Street N Chrome Extension
 
-Front Street N is a Chrome extension developed for EMS description validation on the iAccess platform. This extension helps streamline the process of validating and managing EMS ticket descriptions.
+Front Street N is a Chrome extension developed for EMS description validation on the Maconomy platform. This extension helps streamline the process of validating and managing EMS ticket descriptions.
 
 ## Installation
 
@@ -58,6 +58,7 @@ The `popup.js` script is responsible for the extension's popup UI that appears w
 - **0.1.0**: Initial release of Front Street Chrome Extension.
 - **1.0.1**: Add color prompts to invalid entries
 - **1.0.2**: Fix error on reopening extension mappings
+- **1.1.1**: Fix extension to accomodate new maconomy upgrade
 
 ## Contact
 
